@@ -44,8 +44,28 @@ bot.on('message', async (msg) => {
   if (msg.from.is_bot) return;
 
   console.log('Received a message:', msg);
+ if (msg.photo) 
+{
+    // Handle photo message
+    const fileId = msg.photo[msg.photo.length - 1].file_id;
+    const chatId = msg.chat.id;
 
-  if (msg.text) {
+    // Redirect to another group
+    const targetGroupId = -4206702305; 
+
+    try
+    {
+      await bot.sendPhoto(targetGroupId, fileId, { caption: `Forwarded from ${chatId}` });
+      bot.sendMessage(chatId, 'Your image has been forwarded to the group.');
+    } 
+    catch (error)
+     {
+        console.error('Error forwarding image:', error);
+        bot.sendMessage(chatId, 'Failed to forward the image.');
+    }
+  } 
+  else if (msg.text)  
+    {
     const text = msg.text.trim();
     const [command, ...args] = text.split(' ');
     const argsStr = args.join(' ');
@@ -53,20 +73,26 @@ bot.on('message', async (msg) => {
     console.log('Parsed command:', command);
     console.log('Parsed arguments:', argsStr);
 
-    if (command in commandHandlers) {
+    if (command in commandHandlers)
+   {
       // Handle specific commands
       console.log('Handling command:', command);
       commandHandlers[command](msg, argsStr);
-    } else if (text.startsWith('my name is ')) {
+    }
+     else if (text.startsWith('my name is '))
+     {
       // Process user name
       const name = text.replace('my name is ', '');
       userProfiles[msg.from.id] = { name };
       bot.sendMessage(msg.chat.id, `Nice to meet you, ${name}!`);
-    } else {
+    } else
+    {
       // Default response for unrecognized commands
       bot.sendMessage(msg.chat.id, `I didn't understand: ${text}`);
     }
-  } else {
+  }
+   else
+   {
     console.error('Received message without text:', msg);
   }
 });
@@ -128,3 +154,15 @@ app.listen(PORT, () => {
 });
 
 console.log('Bot is running...');
+
+
+
+
+
+
+
+
+
+
+
+
