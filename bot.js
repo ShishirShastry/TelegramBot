@@ -104,28 +104,17 @@ bot.on('callback_query', (callbackQuery) => {
   const message = callbackQuery.message;
   const data = callbackQuery.data;
 
-  switch (data) {
-    case 'cancel':
-      bot.sendMessage(message.chat.id, 'You have canceled the selection.');
-      break;
-    case 'back':
-      bot.sendMessage(message.chat.id, 'You clicked Back.'); // You can implement back navigation if needed
-      break;
-    case 'forward':
-      bot.sendMessage(message.chat.id, 'You clicked Forward.'); // You can implement forward navigation if needed
-      break;
-    case 'select':
-      bot.sendMessage(message.chat.id, `You selected a number. Please click one of the number buttons.`);
-      break;
-    default:
-      // Notify the user of their selection and remove the buttons
-      bot.sendMessage(message.chat.id, `You selected button: ${data}`);
-      bot.sendMessage(message.chat.id, 'Please click /buttons to show options again.');
-      break;
-  }
+  // Log the callback query
+  console.log('Received callback query:', callbackQuery);
 
-  // Acknowledge the callback
-  bot.answerCallbackQuery(callbackQuery.id);
+  // Send a basic response for testing
+  bot.sendMessage(message.chat.id, `You clicked: ${data}`)
+    .then(() => {
+      bot.answerCallbackQuery(callbackQuery.id);
+    })
+    .catch((error) => {
+      console.error('Error sending message:', error);
+    });
 });
 
 // Handle polling errors
